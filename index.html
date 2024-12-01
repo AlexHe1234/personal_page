@@ -68,7 +68,7 @@
               <td style="padding:20px;width:100%;vertical-align:middle">
                 <h2>News</h2>
                   <ul>
-                    <li>[2024.06] I'll be joining <b>Stanford Vision and Learning Lab</b> supervised by <b><a href="https://elliottwu.com/">Prof. Shangzhe Wu</a></b> and <b><a href="https://jiajunwu.com/">Prof. Jiajun Wu</a></b></li>
+                    <li>[2024.06] I'll be joining <b>Stanford Vision and Learning Lab</b> supervised by <b><a href="https://jiajunwu.com/">Prof. Jiajun Wu</a></b> and <b><a href="https://elliottwu.com/">Prof. Shangzhe Wu</a></b></li>
                     <li>[2024.01] Our work <b>4K4D</b> is accepted to <b>CVPR 2024</b></li>
                     <li>[2023.07] Our work <b>EasyVolcap</b> is accepted to <b>SIGGRAPH Asia 2023 TC</b></li>
                   </ul>
@@ -86,6 +86,112 @@
               </td>
             </tr>
           </tbody></table>
+
+          <!--canor-->
+          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+            <tr onmouseout=" canor_stop()" onmouseover="canor_start()">
+              <td style="padding:20px;width:25%;vertical-align:middle">
+                <div class="one">
+                  <div class="two" id='canor_image'>
+                    <div class="rounded">
+                      <video  width=100% muted autoplay loop>
+                        <source src="images/canor.png">our browser does not support the video tag.
+                      </video>
+                    </div>
+                  </div>
+
+                  <div class="rounded">
+                    <img src='images/canor.png' width=100%>
+                  </div>
+                </div>
+                <script type="text/javascript">
+                  function fourk4d_start() {
+                    document.getElementById('canor_image').style.opacity = "1";
+                  }
+
+                  function fourk4d_stop() {
+                    document.getElementById('canor_image').style.opacity = "0";
+                  }
+                  fourk4d_stop()
+                </script>
+              </td>
+              <td style="padding:20px;width:75%;vertical-align:middle">
+                <span class="papertitle">Category-Agnostic Neural Object Rigging</span>
+
+                <br>
+                <strong>Guangzhao He</strong>,
+                <a href="https://chen-geng.com/">Chen Geng</a>,
+                <a href="https://elliottwu.com/">Shangzhe Wu</a>,
+                <a href="https://jiajunwu.com/">Jiajun Wu</a>
+                <br>
+                <em>Under Review</em>, 2024
+                <br>
+                <!-- <a href="https://zju3dv.github.io/4k4d/">project page</a>
+                /
+                <a href="https://arxiv.org/abs/2310.11448">arXiv</a> -->
+                <p></p>
+                <p>
+                  A feed-forward pipeline that registers any object template onto a sequence of non-rigidly deforming point clouds, with 4.6x faster inference speed and 2x better accuracy than previous SOTA. 
+                </p>
+              </td>
+            </tr>
+          </tbody></table>  
+
+          <!--supergraph-->
+          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+            <tr onmouseout=" supergraph_stop()" onmouseover="supergraph_start()">
+              <td style="padding:20px;width:25%;vertical-align:middle">
+                <div class="one">
+                  <div class="two" id='supergraph_image'>
+                    <div class="rounded">
+                      <video  width=100% muted autoplay loop>
+                        <source src="images/supergraph.png">our browser does not support the video tag.
+                      </video>
+                    </div>
+                  </div>
+
+                  <div class="rounded">
+                    <img src='images/supergraph.png' width=100%>
+                  </div>
+                </div>
+                <script type="text/javascript">
+                  function fourk4d_start() {
+                    document.getElementById('supergraph_image').style.opacity = "1";
+                  }
+
+                  function fourk4d_stop() {
+                    document.getElementById('supergraph_image').style.opacity = "0";
+                  }
+                  fourk4d_stop()
+                </script>
+              </td>
+              <td style="padding:20px;width:75%;vertical-align:middle">
+                <!-- <a href="https://zju3dv.github.io/4k4d/">
+                  <span class="papertitle">SuperGraph: Generalizable Deformation Graph Estimation for Sequential Non-rigid Registration</span>
+                </a> -->
+                <!-- <p> -->
+                <!-- </p> -->
+                <span class="papertitle">SuperGraph: Generalizable Deformation Graph Estimation for Sequential Non-rigid Registration</span>
+
+                <br>
+                <strong>Guangzhao He</strong>,
+                <a href="https://henry123-boy.github.io/">Yuxi Xiao</a>,
+                <a href="https://pengsida.net/">Sida Peng</a>,
+                <a href="https://zhenx.me/">Zhen Xu</a>,
+                <a href="https://xzhou.me/">Xiaowei Zhou</a>
+                <br>
+                <em>Under Review</em>, 2024
+                <br>
+                <!-- <a href="https://zju3dv.github.io/4k4d/">project page</a>
+                /
+                <a href="https://arxiv.org/abs/2310.11448">arXiv</a> -->
+                <p></p>
+                <p>
+                  A feed-forward pipeline that registers any object template onto a sequence of non-rigidly deforming point clouds, with 4.6x faster inference speed and 2x better accuracy than previous SOTA. 
+                </p>
+              </td>
+            </tr>
+          </tbody></table>  
 
           <!--4k4d-->
           <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
@@ -116,9 +222,9 @@
                 </script>
               </td>
               <td style="padding:20px;width:75%;vertical-align:middle">
-                <a href="https://zju3dv.github.io/4k4d/">
+                <!-- <b> -->
                   <span class="papertitle">4K4D: Real-Time 4D View Synthesis at 4K Resolution</span>
-                </a>
+                <!-- </b> -->
                 <br>
                 <a href="https://zhenx.me/">Zhen Xu</a>,
                 <a href="https://pengsida.net/">Sida Peng</a>,
@@ -136,7 +242,7 @@
                 <a href="https://arxiv.org/abs/2310.11448">arXiv</a>
                 <p></p>
                 <p>
-                  Reconstructs a novel point-based 4D representation from multi-view videos, which can be rendered at 200+ FPS  with state-of-the-art quality on a single RTX 3090.
+                  A novel point-based 4D representation reconstructed with multi-view videos, which can be rendered at 4k 200+ FPS with state-of-the-art quality on a single RTX 4090.
                 </p>
               </td>
             </tr>
@@ -170,9 +276,9 @@
                 </script>
               </td>
               <td style="padding:20px;width:75%;vertical-align:middle">
-                <a href="https://github.com/zju3dv/EasyVolcap">
-                  <span class="papertitle">EasyVolcap: Accelerating Neural Volumetric Video Research</span>
-                </a>
+                <!-- <a href="https://github.com/zju3dv/EasyVolcap"> -->
+                <span class="papertitle">EasyVolcap: Accelerating Neural Volumetric Video Research</span>
+                <!-- </a> -->
                 <br>
                 <a href="https://zhenx.me/">Zhen Xu</a>,
                 <a href="https://github.com/xbillowy">Tao Xie</a>,
@@ -192,7 +298,8 @@
                 <a href="https://arxiv.org/abs/2312.06575">arXiv</a>
                 <p></p>
                 <p>
-                  Given multi-view video input, EasyVolcap streamlines the process of data preprocessing, 4D reconstruction, and rendering of dynamic scenes.
+                  A Python & PyTorch library for accelerating volumetric video research, particularly in the area of neural dynamic scene representation, reconstruction, and rendering.
+                  <!-- Given multi-view video input, EasyVolcap streamlines the process of data preprocessing, 4D reconstruction, and rendering of dynamic scenes. -->
                 </p>
               </td>
             </tr>
