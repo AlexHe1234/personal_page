@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Category-Agnostic Neural Object Rigging">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="Computer Vision, 3D Vision, 4D Vision, Object Rigging, Deformation Representation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    Category-Agnostic Neural Object Rigging
+  </title>
+
+  <meta name="msapplication-TileColor" content="#FFFFFF" />
+
+  <!-- <link rel="apple-touch-icon" sizes="57x57"
+    href="https://www-media.stanford.edu/assets/favicon/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon" sizes="60x60"
+    href="https://www-media.stanford.edu/assets/favicon/apple-touch-icon-60x60.png" />
+  <link rel="apple-touch-icon" sizes="72x72"
+    href="https://www-media.stanford.edu/assets/favicon/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="76x76"
+    href="https://www-media.stanford.edu/assets/favicon/apple-touch-icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="114x114"
+    href="https://www-media.stanford.edu/assets/favicon/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="120x120"
+    href="https://www-media.stanford.edu/assets/favicon/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="144x144"
+    href="https://www-media.stanford.edu/assets/favicon/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="152x152"
+    href="https://www-media.stanford.edu/assets/favicon/apple-touch-icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="180x180"
+    href="https://www-media.stanford.edu/assets/favicon/apple-touch-icon-180x180.png" /> -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <!-- <link rel="icon" type="image/png" href="https://www-media.stanford.edu/assets/favicon/favicon-196x196.png"
+    sizes="196x196" />
+  <link rel="icon" type="image/png" href="https://www-media.stanford.edu/assets/favicon/favicon-192x192.png"
+    sizes="192x192" />
+  <link rel="icon" type="image/png" href="https://www-media.stanford.edu/assets/favicon/favicon-128.png" sizes="128x128" />
+  <link rel="icon" type="image/png" href="https://www-media.stanford.edu/assets/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/png" href="https://www-media.stanford.edu/assets/favicon/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="https://www-media.stanford.edu/assets/favicon/favicon-16x16.png" sizes="16x16" /> -->
+
+  <!-- <link rel="stylesheet" href="https://chen-geng.com/rose4d/static/css/bulma.min.css">
+  <link rel="stylesheet" href="https://chen-geng.com/rose4d/static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="https://chen-geng.com/rose4d/static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://chen-geng.com/rose4d/static/css/index.css"> -->
+
+  <!-- <script src="https://chen-geng.com/rose4d/static/js/bulma-carousel.min.js"></script>
+  <script src="https://chen-geng.com/rose4d/static/js/bulma-slider.min.js"></script>
+  <script src="https://chen-geng.com/rose4d/static/js/index.js"></script>
+  <script src="https://chen-geng.com/rose4d/static/js/select.js"></script> -->
+  
+  <style>
+
+  .hero-cover-desktop {
+      background-color: #000000;
+      background-image: url("https://chen-geng.com/rose4d/static/videos/teaser.png");
+      background-size: cover;
+      color: #fff;
+  }
+  .hero-cover-touch {
+      background-color: #000000;
+      background-image: url("https://chen-geng.com/rose4d/static/videos/teaser-mobile.png");
+      background-size: cover;
+      color: #fff;
+  }
+
+  .column-my {
+    flex: 1;  /* Ensures both columns take up equal width */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .half {
+      flex: 1;               /* Each child takes half the height of the column */
+      display: flex;         /* Make it a flex container */
+      justify-content: center; /* Center horizontally */
+      align-items: center;     /* Center vertically */
+      text-align: center;    /* Align text within the element */
+  }
+
+  </style>
+</head>
+
+<script type="text/javascript">
+    var sc_project=12835460; 
+    var sc_invisible=1; 
+    var sc_security="d2e3b553"; 
+    </script>
+    <script type="text/javascript"
+    src="https://www.statcounter.com/counter/counter.js" async></script>
+    <noscript><div class="statcounter"><a title="free hit counter"
+    href="https://statcounter.com/" target="_blank"><img class="statcounter"
+    src="https://c.statcounter.com/12835460/0/d2e3b553/1/" alt="free hit counter"
+    referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+    <!-- End of Statcounter Code -->
+
+<section class="hero hero-cover-desktop is-link is-hidden-touch is-fullheight video" style="overflow: hidden; position:relative;">
+  <div class="hero-video is-hidden-touch"
+    style="height: 100%; width: 177.77777778vh; min-width: 100%;min-height: 56.25vw;">
+    <video playsinline autoplay muted loop>
+      <source src="https://chen-geng.com/rose4d/static/videos/teaser-small.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-video is-hidden-desktop is-inline-block-mobile"
+    style="height: 154.28571428vw; width: 100%; min-width:64.81481481vh;min-height:100%;">
+    <video playsinline autoplay muted loop>
+      <source src="https://chen-geng.com/rose4d/static/videos/teaser-mobile-small.mp4" type="video/mp4">
+    </video>
+  </div> 
+  <div class="overlay">
+  </div>
+
+  <div class="hero-head is-hidden-touch">
+    <header class="navbar is-hidden-touch">
+      <div class="container is-size-5">
+        <div class="navbar-menu">
+          <div class="navbar-end">
+            <a class="navbar-item pl-4 pr-4" href="https://chen-geng.com/files/rose4d.pdf">
+              <span class="icon" style="margin-right:5px;">
+                <img src="https://chen-geng.com/rose4d/static/images/pdf.svg" alt="PDF" />
+              </span>
+              <span>Paper</span>
+            </a>
+            <a class="navbar-item  pl-4 pr-4" href="https://arxiv.org/abs/2412.05278">
+              <span class="icon" style="margin-right:5px;">
+                <img src="https://chen-geng.com/rose4d/static/images/arxiv.svg" alt="ArXiv" />
+              </span>
+              <span>arXiv</span> 
+            </a>
+            <a class="navbar-item  pl-4 pr-4" href="rose4d">
+              <span class="icon" style="margin-right:5px;">
+                <img src="https://chen-geng.com/rose4d/static/images/github.png" alt="GitHub" />
+              </span>
+              <span>Code (Coming soon)</span> 
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!--  Hero content: will be in the middle -->
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title is-1 publication-title is-size-1-mobile" style="font-size: 7rem;">
+        Birth and Death <br> of a Rose
+      </h1>
+      <!-- <h1 class="subtitle is-1 publication-title is-size-4-mobile" style="font-size: 2rem;">
+        Temporal Object Intrinsics Generation
+      </h1> -->
+      <h1 class="subtitle is-1 publication-title is-size-4-mobile" style="font-size: 2rem;">
+        CVPR 2025 (Oral Presentation)
+      </h1>
+      <h1 class="is-2 is-size-4-mobile" style="font-size: 2rem; opacity: 100%;">
+        <a href="https://chen-geng.com">Chen Geng</a>, <a href="https://cs.stanford.edu/~yzzhang/">Yunzhi Zhang</a>, <a
+          href="https://elliottwu.com/">Shangzhe Wu</a>, <a href="https://www.jiajunwu.com">Jiajun Wu</a>
+      </h1>
+      <h1 class="is-2 is-size-4-mobile" style="font-size: 2rem; opacity: 100%;">
+        Stanford University
+      </h1>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- Hero footer: will stick at the bottom -->
+  <div class="hero-foot is-hidden-mobile">
+    <nav class="tabs is-boxed is-fullwidth is-size-5">
+      <ul>
+        <li><a href="rose4d#intro">Introduction</a></li>
+        <li><a href="rose4d#app">Applications</a></li>
+        <li><a href="rose4d#toi">Generated Instances</a></li>
+        <li><a href="rose4d#comp">Comparisons</a></li>
+        <li><a href="rose4d#approach">Approach</a></li>
+      </ul>
+    </nav>
+  </div>
+</section>
+
+<section class="hero hero-cover-touch is-hidden-desktop is-link is-fullheight video" style="overflow: hidden; position:relative;">
+
+  <!-- <div class="hero-video is-hidden-desktop is-inline-block-mobile"
+    style="height: 154.28571428vw; width: 100%; min-width:64.81481481vh;min-height:100%;">
+    <video playsinline autoplay muted loop>
+      <source src="/rose4d/static/videos/teaser-mobile-small.mp4" type="video/mp4">
+    </video>
+  </div>  -->
+
+  <div class="hero-video is-inline-block-mobile"
+  style="height: 172.28571428vw; width: 100%; min-width: 100%;min-height: 56.25vw;">
+  <video playsinline autoplay muted loop>
+    <source src="https://chen-geng.com/rose4d/static/videos/teaser-mobile-small.mp4" type="video/mp4">
+  </video>
+  </div>
+
+
+  <div class="overlay">
+  </div>
+
+  <!--  Hero content: will be in the middle -->
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title is-1 publication-title is-size-1-mobile" style="font-size: 7rem;">
+        Birth and Death <br> of a Rose
+      </h1>
+      <h1 class="subtitle is-1 publication-title is-size-4-mobile" style="font-size: 2rem;">
+        Temporal Object Intrinsics Generation
+      </h1>
+      <h1 class="is-2 is-size-4-mobile" style="font-size: 2rem; opacity: 100%;">
+        <a href="https://chen-geng.com">Chen Geng</a>, <a href="https://cs.stanford.edu/~yzzhang/">Yunzhi Zhang</a>, <a
+          href="https://elliottwu.com/">Shangzhe Wu</a>, <a href="https://www.jiajunwu.com">Jiajun Wu</a>
+      </h1>
+      <h1 class="is-2 is-size-4-mobile" style="font-size: 2rem; opacity: 100%;">
+        Stanford University
+      </h1>
+    </div>
+  </div>
+
+  </div>
+
+</section>
+
+
+
+
+<section class="section is-medium" id="intro">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths has-text-justified">
+        <h2 class="subtitle">
+          We study the problem of generating <strong>temporal object intrinsics</strong> --- temporally evolving
+          sequences of object geometry, reflectance, and texture, such as a blooming --- from pre-trained 2D foundation
+          models.
+        </h2>
+        <br>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-five-fifths has-text-justified">
+        <video autoplay muted loop playsinline width="100%" poster="https://chen-geng.com/rose4d/static/images/loading.svg">
+          <source src="https://chen-geng.com/rose4d/static/videos/temporal-object-intrinsics/blooming.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+    <div class="columns is-centered is-mobile is-mobile">
+      <div class="column is-one-fifths has-text-centered">
+        Rendering
+      </div>
+      <div class="column is-one-fifths has-text-centered">
+        Geometry
+      </div>
+      <div class="column is-one-fifths has-text-centered">
+        Albedo
+      </div>
+      <div class="column is-one-fifths has-text-centered">
+        Material
+      </div>
+      <div class="column is-one-fifths has-text-centered">
+        Visibility
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="section is-small" id="app">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-1 has-text-centered is-size-4-mobile">What are the applications?</h2>
+        <div class="content">
+          <p>
+            Using the generated temporal object intrinsics, we can insert them to <strong>any 3D scene</strong>, render
+            them from <strong>any viewpoint</strong>, under <strong>any environmental lighting conditions</strong>, at
+            <strong>any time of their lifespan</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section is-small" id="rose">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered is-size-4-mobile">Let's watch roses' birth and death:</h2>
+        <div class="content">
+          <p>
+            Starting from a bud, the roses gradually expands their pedals and blossoms into full glory, only to wither
+            and conclude their lifespans.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<video autoplay muted loop playsinline width="100%"  poster="https://chen-geng.com/rose4d/static/images/loading.svg">
+  <source src="https://chen-geng.com/rose4d/static/videos/demos/lifespan.mp4" type="video/mp4">
+</video>
+
+<section class="section is-small" id="rose">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered is-size-4-mobile">How is bread baked from fresh dough?</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<video autoplay muted loop playsinline width="100%" poster="https://chen-geng.com/rose4d/static/images/loading.svg">
+  <source src="https://chen-geng.com/rose4d/static/videos/demos/render_baking.mp4" type="video/mp4">
+</video>
+
+<section class="section is-small" id="rose">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered is-size-4-mobile">Young plants are sprouting...</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<video autoplay muted loop playsinline width="100%" poster="https://chen-geng.com/rose4d/static/images/loading.svg">
+  <source src="https://chen-geng.com/rose4d/static/videos/demos/render_sprouts.mp4" type="video/mp4">
+</video>
+
+<section class="section is-small" id="rose">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered is-size-4-mobile">Icecreams are melting...</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<video autoplay muted loop playsinline width="100%" poster="https://chen-geng.com/rose4d/static/images/loading.svg">
+  <source src="https://chen-geng.com/rose4d/static/videos/demos/render_icecream.mp4" type="video/mp4">
+</video>
+
+<section class="section is-small" id="rose">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered is-size-4-mobile">Candles are burning...</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<video autoplay muted loop playsinline width="100%" poster="https://chen-geng.com/rose4d/static/images/loading.svg">
+  <source src="https://chen-geng.com/rose4d/static/videos/demos/render_candle.mp4" type="video/mp4">
+</video>
+
+<section class="section is-small" id="toi">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-2 has-text-centered is-size-4-mobile">Generated Temporal Object Intrinsics</h2>
+        <div class="content">
+          <p>
+            We show the generated temporal object intrinsics using the proposed pipeline in this section.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section is-small" id="rose">
+  <div class="container is-max-desktop is-centered">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered is-size-4-mobile">Select Natural Phenomena:</h2>
+      </div>
+    </div>
+    <div id="toi-buttons" class="columns is-centered">
+      <button class="button is-primary" onclick="Change_TOI_scene(0)">Flower Blooming</button>
+      <button class="button" onclick="Change_TOI_scene(1)">Flower Withering</button>
+      <button class="button" onclick="Change_TOI_scene(2)">Plant Sprouts</button>
+      <button class="button" onclick="Change_TOI_scene(3)">Bread Baking</button>
+      <button class="button" onclick="Change_TOI_scene(4)">Candle Burning</button>
+      <button class="button" onclick="Change_TOI_scene(5)">Icecream Melting</button>
+      <button class="button" onclick="Change_TOI_scene(6)">Banana Rotting</button>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-centered is-four-quarters has-text-justified">
+        <div class="columns is-centered">
+          <div class="column is-four-quarters has-text-justified">
+            <video autoplay muted loop playsinline width="100%" id="toi-video" src="https://chen-geng.com/rose4d/static/videos/temporal-object-intrinsics/blooming2.mp4">
+          </div>
+        </div>
+        <div class="columns is-centered is-mobile">
+          <div class="column is-one-quarter has-text-centered">
+            <h4>Rendering</h4>
+          </div>
+          <div class="column is-one-quarter has-text-centered">
+            <h4>Geometry</h4>
+          </div>
+          <div class="column is-one-quarter has-text-centered">
+            <h4>Albedo</h4>
+          </div>
+          <div class="column is-one-quarter has-text-centered">
+            <h4>Material</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section is-small" id="comp">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-2 has-text-centered is-size-4-mobile">Comparison w/ Baselines</h2>
+        <div class="content">
+          <p>
+            We show the comparison of the generated 4D contents and baselines. <strong>Note that none of the baselines
+              could generate object intrinsics or relightable graphics assets.</strong> Therefore we only compare the
+            rendering.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section is-small" id="rose">
+  <div class="container is-max-desktop is-centered">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered is-size-4-mobile">Select Natural Phenomena:</h2>
+      </div>
+    </div>
+
+    <div id="comp-buttons" class="columns is-centered">
+      <button class="button is-primary" onclick="Change_comp_scene(0)">Flower Blooming</button>
+      <button class="button" onclick="Change_comp_scene(1)">Flower Withering</button>
+      <button class="button" onclick="Change_comp_scene(2)">Plant Sprouts</button>
+      <button class="button" onclick="Change_comp_scene(3)">Bread Baking</button>
+      <button class="button" onclick="Change_comp_scene(4)">Candle Burning</button>
+      <button class="button" onclick="Change_comp_scene(5)">Icecream Melting</button>
+      <button class="button" onclick="Change_comp_scene(6)">Banana Rotting</button>
+    </div>
+
+    <div class="columns is-centered is-mobile">
+      <div class="column is-centered is-four-fifths is-offset-one-fifths has-text-justified">
+        <div class="columns is-centered is-mobile">
+          <div class="column-my">
+              <div class="half">
+                <p> View 1 </p>
+              </div>
+              <div class="half">
+                <p> View 2 </p>
+              </div>
+          </div>
+          <div class="column is-one-fifths has-text-centered">
+            <video autoplay muted loop playsinline width="100%" src="https://chen-geng.com/rose4d/static/videos/comparisons/blooming_ours.mp4" type="video/mp4" class="comp-videos">
+            </video>
+          </div>
+
+          <div class="column is-one-fifths has-text-centered">
+            <video autoplay muted loop playsinline width="100%" src="https://chen-geng.com/rose4d/static/videos/comparisons/blooming_4dfy.mp4" type="video/mp4" class="comp-videos">
+            </video>
+          </div>
+
+          <div class="column is-one-fifths has-text-centered">
+            <video autoplay muted loop playsinline width="100%" src="https://chen-geng.com/rose4d/static/videos/comparisons/blooming_dg4d.mp4" type="video/mp4" class="comp-videos">
+            </video>
+          </div>
+
+          <div class="column is-one-fifths has-text-centered">
+            <video autoplay muted loop playsinline width="100%" src="https://chen-geng.com/rose4d/static/videos/comparisons/blooming_stag4d.mp4" type="video/mp4" class="comp-videos">
+            </video>
+          </div>
+        </div>
+        <div class="columns is-centered is-mobile">
+          <div class="column is-one-fifths has-text-centered">
+            <!-- Ours -->
+          </div>
+          <div class="column is-one-fifths has-text-centered">
+            Ours
+          </div>
+          <div class="column is-one-fifths has-text-centered">
+            4D-fy
+          </div>
+          <div class="column is-one-fifths has-text-centered">
+            DreamGaussian4D
+          </div>
+          <div class="column is-one-fifths has-text-centered">
+            STAG4D
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section is-small is-hidden-touch" id="approach">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-1 has-text-centered is-size-4-mobile">Approach</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="columns is-centered is-hidden-touch">
+  <img src="https://chen-geng.com/rose4d/static/images/approach.png" alt="Approach" width="60%">
+</div>
+
+<section class="section is-hidden-touch" id="approach">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <!-- <div class="column is-six-fifths"> -->
+      <div class="content">
+        <p>
+          For a modeled natural process, we first estimate a task-specific Neural Template to get a 4D-consistent
+          representation of its temporal state changes. Then we iteratively optimize a hybrid 4D intrinsics field to
+          generate temporal object intrinsics. In each iteration of optimization, we sample a camera pose and timestamp
+          to render this optimizable 4D field into intrinsic maps. These maps are subsequently rendered into RGB images
+          using a physically-based renderer. Concurrently, the same camera pose and timestamp are used to query the
+          Neural Template for the corresponding Neural State Map. This map conditions a fine-tuned 2D diffusion model,
+          which provides guidance signals to update the 4D representation. For more details, please refer to our <a href="https://chen-geng.com/rose4d/static/paper.pdf">paper</a>.
+        </p>
+      </div>
+      <!-- </div> -->
+    </div>
+  </div>
+</section>
+
+
+<section class="section is-hidden-touch" id="bibtex">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <h3 class="title">Bibtex</h3>
+    </div>
+    <div class="columns is-centered">
+      <div class="content" style="margin-top: 10pt;">
+        <pre class="is-hidden-mobile"><code>@article{geng2024rose4d,
+  title={Birth and Death of a Rose},
+  author={Chen Geng and Yunzhi Zhang and Shangzhe Wu and Jiajun Wu},
+  journal={arXiv preprint arXiv:2412.05278},
+  year={2024}
+}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <h3 class="title">Acknowledgements</h3>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            The paper's title is inspired by the artwork, <em> <a href="https://hammer.ucla.edu/radical-women/art/art/nacer-y-morir-de-una-rosa-birth-and-death-of-a-rose">Nacer y Morir de una Rosa</a></em>, by Colombian artist Rosa Navarro, recently on exhibit at the Orange County Museum of Art in 2023. We thank Haian Jin, Zizhang Li, and Ruocheng Wang for insightful discussions and feedback on the paper. This work is in part supported by NSF RI #2211258, #2338203, ONR MURI N00014-22-1-2740, and Samsung. YZ is in part supported by the Stanford Interdisciplinary Graduate Fellowship.
+          </p>
+          <p>
+            Website template modified from <a href="https://nerfies.github.io/">NeRFies</a>, <a
+              href="https://www.cs.columbia.edu/~huy/scalingup/">Scaling Up Distilling Down</a>, and <a
+              href="https://umi-on-legs.github.io/">UMI on Legs</a>.
+          </p>
+          <p>
+            This website is licensed under a <a rel="license"
+              href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow and modify the <a
+              href="https://github.com/nerfies/nerfies.github.io">source
+              code</a> of this website as long as
+            you link back to the <a href="https://nerfies.github.io/">NeRFies</a> page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+
+</html>
