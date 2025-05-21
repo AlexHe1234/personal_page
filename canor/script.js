@@ -611,8 +611,8 @@ updateIcon();
 setInterval(updateIcon, 1000);
 
 // Pre-fetch all meshes into cache (do this in order)
-async function preloadMeshes(meshPaths) {
-    const cache = await caches.open('mesh-cache-v1');
+async function preloadMeshes(meshPaths, cacheName = 'mesh-cache-v1') {
+    const cache = await caches.open(cacheName);
     for (const path of meshPaths) {
         console.log(`Preloading mesh: ${path}`);
         const response = await fetch(path);
@@ -658,17 +658,17 @@ async function prefetchMeshes() {
     // console.log('qua mesdh paths', quad_mesh_paths);
     const quad_blob_paths = generateMeshPaths("assets/meshes/quad/blob", 10, 10, 10);
     const quad_paths = mergeClose(quad_blob_paths, quad_mesh_paths);
-    await preloadMeshes(quad_paths);  // Blobs are closer to user's interactions so we preload them first
+    await preloadMeshes(quad_paths, 'mesh-cache-quad');  // Blobs are closer to user's interactions so we preload them first
 
     const fish_mesh_paths = generateMeshPaths("assets/meshes/fish/mesh", 10, 10, 10);
     const fish_blob_paths = generateMeshPaths("assets/meshes/fish/blob", 10, 10, 10);
     const fish_paths = mergeClose(fish_blob_paths, fish_mesh_paths);
-    await preloadMeshes(fish_paths);
+    await preloadMeshes(fish_paths, 'mesh-cache-fish');
 
     const glasses_mesh_paths = generateMeshPaths("assets/meshes/glasses/mesh", 10, 10, 1);
     const glasses_blob_paths = generateMeshPaths("assets/meshes/glasses/blob", 10, 10, 1);
     glasses_paths = mergeClose(glasses_blob_paths, glasses_mesh_paths);
-    await preloadMeshes(glasses_paths);
+    await preloadMeshes(glasses_paths, 'mesh-cache-glasses');
 }
 
 prefetchMeshes();
