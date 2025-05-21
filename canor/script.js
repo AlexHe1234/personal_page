@@ -609,3 +609,48 @@ updateIcon();
 
 // Change every 1000ms (1 second)
 setInterval(updateIcon, 1000);
+
+// Pre-fetch all meshes into cache (do this in order)
+async function preloadMeshes(meshPaths) {
+    const cache = await caches.open('mesh-cache-v1');
+    for (const path of meshPaths) {
+        console.log(`Preloading mesh: ${path}`);
+        const response = await fetch(path);
+        if (response.ok) {
+        await cache.put(path, response.clone());
+        } else {
+        console.warn(`Failed to preload: ${path}`);
+        }
+    }
+}
+
+function generateMeshPaths(baseDir, dim1, dim2, dim3) {
+    const paths = [];
+    for (let i = 0; i < dim1; i++) {
+      for (let j = 0; j < dim2; j++) {
+        for (let k = 0; k < dim3; k++) {
+          const filename = `${String(i).padStart(2, '0')}_${String(j).padStart(2, '0')}_${String(k).padStart(2, '0')}.glb`;
+          // Make sure baseDir ends with '/' or add it
+          const fullPath = baseDir.endsWith('/') ? baseDir + filename : baseDir + '/' + filename;
+          paths.push(fullPath);
+        }
+      }
+    }
+    return paths;
+}
+  
+const quad_mesh_paths = generateMeshPaths("assets/meshes/quad/mesh", 10, 10, 10);
+// console.log('qua mesdh paths', quad_mesh_paths);
+const quad_blob_paths = generateMeshPaths("assets/meshes/quad/blob", 10, 10, 10);
+preloadMeshes(quad_blob_paths);  // Blobs are closer to user's interactions so we preload them first
+preloadMeshes(quad_mesh_paths);
+
+const fish_mesh_paths = generateMeshPaths("assets/meshes/fish/mesh", 10, 10, 10);
+const fish_blob_paths = generateMeshPaths("assets/meshes/fish/blob", 10, 10, 10);
+preloadMeshes(fish_blob_paths);
+preloadMeshes(fish_mesh_paths);
+
+const glasses_mesh_paths = generateMeshPaths("assets/meshes/glasses/mesh", 10, 10, 1);
+const glasses_blob_paths = generateMeshPaths("assets/meshes/glasses/blob", 10, 10, 1);
+preloadMeshes(glasses_blob_paths);
+preloadMeshes(glasses_mesh_paths);
