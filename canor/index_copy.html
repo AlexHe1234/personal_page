@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="description" content="Category-Agnostic Neural Object Rigging">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="CANOR, Computer Vision, 3D Vision, 4D Vision, Object Rigging, Deformation Representation">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+      Category-Agnostic Neural Object Rigging
+    </title>
+
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/modern-normalize@3.0.1/modern-normalize.min.css" rel="stylesheet" /> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.19.0/tabler-icons-outline.min.css"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://chen-geng.com/rose4d/static/css/bulma.min.css">
+    <link rel="stylesheet" href="https://chen-geng.com/rose4d/static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="https://chen-geng.com/rose4d/static/css/bulma-slider.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"> -->
+    <link rel="stylesheet" href="https://chen-geng.com/rose4d/static/css/index.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script src="https://chen-geng.com/rose4d/static/js/bulma-carousel.min.js"></script>
+    <script src="https://chen-geng.com/rose4d/static/js/bulma-slider.min.js"></script>
+    <script src="https://chen-geng.com/rose4d/static/js/index.js"></script>
+    <script src="https://chen-geng.com/rose4d/static/js/select.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@latest/dist/model-viewer.js"></script> -->
+    <!-- <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script> -->
+    <!-- <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script> -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>    
+
+    <style>
+
+      .slider-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        flex-direction: column;
+        gap: 2vw;
+      }
+  
+      .slider {
+        width: 0.9vh;
+        height: 50%;
+        background: linear-gradient(0deg, #0039a39a, #3010919d);
+        border-radius: 0.45vh;
+        position: relative;
+        cursor: pointer;
+      }
+  
+      .slider .thumb {
+        width: 1.8vh;
+        height: 1.8vh;
+        background: #fff;
+        border-radius: 50%;
+        border: 0px solid #ffffff;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        cursor: pointer;
+      }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);  /* Creates two columns */
+        width: 80%;
+        height: 100%;
+        flex: auto;
+        gap: 1em;
+    }
+
+    .row {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .model-viewer-wrapper {
+      width: 80%;    /* You can adjust this value */
+      height: 80%;   /* You can adjust this value */
+      max-width: 100%;
+      max-height: 80%;
+      justify-content: center;     /* Center the model viewer */
+      align-items: center;         /* Center the model viewer content */
+      display: flex;
+      background-color: #00000069; /* Optional background for the wrapper */
+      border-radius: 20px;         /* Optional rounded corners */
+      margin-top: 20px;            /* Space between text and model viewer */
+    }
+
+
+    .modelviewer-container {
+      display: flex;
+      flex-direction: column;      /* Stack children vertically */
+      justify-content: center;     /* Center horizontally */
+      align-items: center;         /* Center horizontally */
+      width: 100%;
+      text-align: center;
+    }
+
+    .hero-cover-desktop {
+        background-color: #000000;
+        background-image: url("https://chen-geng.com/rose4d/static/videos/teaser.png");
+        background-size: cover;
+        color: #fff;
+    }
+    .hero-cover-touch {
+        background-color: #000000;
+        background-image: url("https://chen-geng.com/rose4d/static/videos/teaser-mobile.png");
+        background-size: cover;
+        color: #fff;
+    }
+
+    .column-my {
+      flex: 1;  /* Ensures both columns take up equal width */
+      display: flex;
+      flex-direction: column;
+    }
+
+    .text-white {
+      color: white;
+    }
+
+    .half {
+        flex: 1;               /* Each child takes half the height of the column */
+        display: flex;         /* Make it a flex container */
+        justify-content: center; /* Center horizontally */
+        align-items: center;     /* Center vertically */
+        text-align: center;    /* Align text within the element */
+    }
+
+    html, body {
+      margin: 0;
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+      overflow: hidden;
+      font-family: 'Linux Biolium', sans-serif;
+    }
+
+    .scroll-container {
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+    }
+  
+    /**
+    .section {
+      height: 100vh;
+      scroll-snap-align: start;
+      color: white;
+      background-color: #000000;
+    }
+      **/
+
+    @keyframes glowAnimation {
+      0% {
+        mask-image: radial-gradient(circle, rgba(255, 255, 255, 0) 40%, rgba(116, 64, 188, 0.7) 100%);
+      }
+      50% {
+        mask-image: radial-gradient(circle, rgba(255, 255, 255, 0) 30%, rgba(0, 255, 255, 0.8) 100%);
+      }
+      100% {
+        mask-image: radial-gradient(circle, rgba(255, 255, 255, 0) 40%, rgba(163, 82, 145, 0.8) 100%);
+      }
+    }
+    
+    /*
+    .section {
+      height: 100vh;
+      scroll-snap-align: start;
+      color: white;
+      background-color: #000000;
+      position: relative; 
+    }
+    */
+
+    .gradient-text-leftclick {
+      background: linear-gradient(45deg, #00bcd4, #4e54c8); /* Define your gradient */
+      -webkit-background-clip: text; /* Required for Safari */
+      background-clip: text; /* Standard for modern browsers */
+      color: transparent; /* Set text color to transparent */
+    }
+
+    .gradient-text-rightclick {
+      background: linear-gradient(45deg, #4e54c8, #8f94fb); /* Define your gradient */
+      -webkit-background-clip: text; /* Required for Safari */
+      background-clip: text; /* Standard for modern browsers */
+      color: transparent; /* Set text color to transparent */
+    }
+
+    .gradient-text-scroll {
+      background: linear-gradient(45deg, #8f94fb, #7960ca); /* Define your gradient */
+      -webkit-background-clip: text; /* Required for Safari */
+      background-clip: text; /* Standard for modern browsers */
+      color: transparent; /* Set text color to transparent */
+    }
+
+    .gradient-text-slide {
+      background: linear-gradient(45deg, #7960ca, #c672c5); /* Define your gradient */
+      -webkit-background-clip: text; /* Required for Safari */
+      background-clip: text; /* Standard for modern browsers */
+      color: transparent; /* Set text color to transparent */
+    }
+
+    .section {
+      height: 100vh;
+      scroll-snap-align: start;
+      color: white;
+      flex-direction: column;
+      background-color: #000000;
+      position: relative;
+      display: flex;                 /* Enables Flexbox layout */
+      justify-content: center;       /* Centers content horizontally */
+      align-items: center;           /* Centers content vertically */
+    }
+
+    /* 
+    .section::before {
+    content: ''; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(farthest-corner, rgba(255, 255, 255, 0) 70%, rgba(133, 72, 255, 0.342) 100%);
+    pointer-events: none;
+    z-index: 1000;
+    } 
+    */
+    
+    .section-nav {
+      position: fixed;
+      top: 50%;
+      right: 0.8vh;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 1vh;
+      z-index: 100;
+    }
+    
+    .section-nav .dot {
+      width: 1.3vh;
+      height: 1.3vh;
+      border-radius: 50%;
+      background: #ccc;
+      transition: background 0.3s ease;
+    }
+    
+    .section-nav .dot:hover,
+    .section-nav .dot.active {
+      background: #36e9e6;
+    }
+    </style>
+  </head>
+
+  <body>      
+
+    <div class="scroll-container">
+
+    <div class="section-nav">
+      <a href="#cover" class="dot active" title="Cover"></a>
+      <a href="#intro" class="dot" title="Introduction"></a>
+      <a href="#inter" class="dot" title="Interactive Results"></a>
+      <a href="#clay" class="dot" title="Clay-Monster"></a>
+      <a href="#approach" class="dot" title="Approach"></a>
+    </div>
+
+    <!-- For PC and desktop devices -->
+    <!-- <section class="hero hero-cover-desktop is-link is-hidden-touch is-fullheight video" style="overflow: hidden; position:relative;" id="cover"> -->
+    <div class="section hero hero-cover-desktop is-link is-fullheight video" style="overflow: hidden; position:relative;" id="cover">
+      
+      <!-- Teaser video -->
+      <div class="hero-video" style="height: 100%; width: 177.77777778vh; min-width: 100%;min-height: 56.25vw;">
+        <video playsinline autoplay muted loop>
+          <source src="https://chen-geng.com/rose4d/static/videos/teaser-small.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="overlay"></div>
+
+      <!-- Top bar -->
+      <div class="hero-head is-hidden-touch">
+        <header class="navbar is-hidden-touch">
+          <div class="container is-size-5">
+            <div class="navbar-menu">
+              <div class="navbar-end">
+                <a class="navbar-item pl-4 pr-4" href="https://guangzhaohe.com/canor/assets/paper.pdf">
+                  <span class="icon" style="margin-right:5px;">
+                    <img src="https://chen-geng.com/rose4d/static/images/pdf.svg" alt="PDF" />
+                  </span>
+                  <span>Paper</span>
+                </a>
+                <a class="navbar-item  pl-4 pr-4" href="https://arxiv.org/abs/2412.05278">
+                  <span class="icon" style="margin-right:5px;">
+                    <img src="https://chen-geng.com/rose4d/static/images/arxiv.svg" alt="ArXiv" />
+                  </span>
+                  <span>arXiv (Coming soon)</span> 
+                </a>
+                <a class="navbar-item  pl-4 pr-4" href="rose4d">
+                  <span class="icon" style="margin-right:5px;">
+                    <img src="https://chen-geng.com/rose4d/static/images/github.png" alt="GitHub" />
+                  </span>
+                  <span>Code (Coming soon)</span> 
+                </a>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+
+      <!--  Hero content: will be in the middle -->
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title is-1 publication-title is-size-1-mobile" style="font-size: 7rem;">
+            Category-Agnostic Neural Object Rigging
+          </h1>
+          <h1 class="subtitle is-1 publication-title is-size-4-mobile" style="font-size: 2rem;">
+            CVPR 2025
+          </h1>
+          <h1 class="is-2 is-size-4-mobile" style="font-size: 2rem; opacity: 100%;">
+            <span>
+              <a href="https://guangzhaohe.com">Guangzhao He</a>
+              <sup>1*</sup>
+            </span>,
+            <span>
+              <a href="https://chen-geng.com">Chen Geng</a>
+              <sup>1*</sup>
+            </span>,
+            <span>
+              <a href="https://elliottwu.com/">Shangzhe Wu</a>
+              <sup>2</sup>
+            </span>,
+            <span>
+              <a href="https://www.jiajunwu.com">Jiajun Wu</a>
+              <sup>1</sup>
+            </span>
+          </h1>
+          <h1 class="is-2 is-size-4-mobile" style="font-size: 2rem; opacity: 100%;">
+            Stanford University, University of Cambridge
+          </h1>
+          <h1 class="is-2 is-size-4-mobile" style="font-size: 2rem; opacity: 100%;">
+            (* denotes equal contribution)
+          </h1>
+        </div>
+      </div>
+      
+      <!-- Hero footer: will stick at the bottom -->
+      <div class="hero-foot is-hidden-mobile">
+        <nav class="tabs is-boxed is-fullwidth is-size-5">
+          <ul>
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#inter">Interactive Results</a></li>
+            <li><a href="#clay">"Clay-Monster"</a></li>
+            <li><a href="#approach">Approach</a></li>
+          </ul>
+        </nav>
+      </div>
+
+    </div>
+
+    <!-- For mobile devices -->
+    <!-- <div class="section hero hero-cover-touch is-hidden-desktop is-link is-fullheight video" style="overflow: hidden; position:relative;">
+
+      <div class="hero-video is-inline-block-mobile"
+      style="height: 172.28571428vw; width: 100%; min-width: 100%;min-height: 56.25vw;">
+        <video playsinline autoplay muted loop>
+          <source src="https://chen-geng.com/rose4d/static/videos/teaser-mobile-small.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="overlay"></div>
+
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title is-1 publication-title is-size-1-mobile" style="font-size: 7rem;">
+            Category-Agnostic <br> Neural Object Rigging
+          </h1>
+          <h1 class="subtitle is-1 publication-title is-size-4-mobile" style="font-size: 2rem;">
+            CVPR 2025
+          </h1>
+          <h1 class="is-2 is-size-4-mobile" style="font-size: 2rem; opacity: 100%;">
+            <span>
+              <a href="https://guangzhaohe.com">Guangzhao He</a>
+              <sup>1*</sup>
+            </span>,
+            <span>
+              <a href="https://chen-geng.com">Chen Geng</a>
+              <sup>1*</sup>
+            </span>,
+            <span>
+              <a href="https://elliottwu.com/">Shangzhe Wu</a>
+              <sup>2</sup>
+            </span>,
+            <span>
+              <a href="https://www.jiajunwu.com">Jiajun Wu</a>
+              <sup>1</sup>
+            </span>
+          </h1>
+          <h1 class="is-2 is-size-4-mobile" style="font-size: 2rem; opacity: 100%;">
+            Stanford University, University of Cambridge
+          </h1>
+          <h1 class="is-2 is-size-4-mobile" style="font-size: 2rem; opacity: 100%;">
+            (* denotes equal contribution)
+          </h1>
+        </div>
+      </div>
+
+      </div>
+
+    </div> -->
+    
+  <!-- </div> -->
+
+  <!-- Intro -->
+  <div class="section is-medium" id="intro">
+    <!-- Title -->
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 10vh;">
+      <div class="container">
+        <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 5vh;">
+          Introduction
+        </h1>
+      </div>
+    </div>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <img src="assets/teaser.png" alt="Approach Image" style="max-width: 80%; height: auto; filter: brightness(90%);">
+  </div>
+  </div>
+
+  <!-- Interactive demo -->
+  <div class="section" id="inter">
+
+    <!-- Title -->
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 10vh;">
+      <div class="container">
+        <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 5vh;">
+          Try animating with blobs yourself!
+        </h1>
+      </div>
+    </div>
+
+    <br>
+
+    <div style="display: flex; justify-content: center; align-items: center; height: 8vh;">
+      <div class="content" style="font-size: 1.2rem; width: 70%; text-align: center;">
+        <p>
+          We show the comparison of the generated 4D contents and baselines. <strong>Note that none of the baselines
+            could generate object intrinsics or relightable graphics assets.</strong> Therefore we only compare the
+          rendering.
+        </p>
+      </div>
+    </div>
+
+    <br>
+
+
+    <div id="wrapper" style="
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: center;
+      height: 70%;
+      width: 70%;">
+
+      <div class="row" style="height: 100%;">
+
+        <div class="grid-container">
+
+          <div class="modelviewer-container">
+            <strong style="color: rgb(44, 76, 204);">Reconstructed Mesh</strong>
+            <!-- <br> -->
+            <!-- <div id="progress-container" style="position: absolute; bottom: 10px; left: 10px; width: 200px; background: #eee; height: 6px; display: none;">
+              <div id="progress-bar" style="background: #3498db; height: 100%; width: 0%; transition: width 0.2s;"></div>
+            </div> -->
+            <div class="model-viewer-wrapper" style="box-shadow: 0 0 3.3vh 1.5vh rgba(26, 52, 156, 0.791);">
+              <model-viewer id="model1" camera-orbit="0.966rad 1.54rad 16.4m"
+                camera-target="1.33m -0.32m 1.6m" src="assets/meshes/example/input.glb"
+                alt="Reconstructed Mesh" camera-controls interaction-prompt="none" exposure=0.5 style="width: 100%; height: 100%;">
+              </model-viewer>
+            </div>
+          </div>
+
+          <div class="modelviewer-container">
+              <!-- <h3> -->
+                <strong style="color: rgb(70, 29, 185);">Predicted Blobs</strong>
+              <!-- </h3> -->
+              <!-- <br> -->
+            <div class="model-viewer-wrapper" style="box-shadow: 0 0 3.3vh 1.5vh rgba(55, 18, 156, 0.606);">
+              <model-viewer id="model2" camera-orbit="0.966rad 1.54rad 16.4m"
+                  camera-target="1.33m -0.32m 1.6m" src="assets/meshes/example/blob.glb"
+                  alt="Predicted Blobs" camera-controls interaction-prompt="none" exposure=0.5 style="width: 100%; height: 100%;">
+              </model-viewer>
+            </div>
+          </div>
+          <div class="modelviewer-container">
+            <strong style="color: rgb(117, 37, 214);">Edited Blobs</strong>
+            <!-- <br> -->
+            <div class="model-viewer-wrapper" style="box-shadow: 0 0 3.3vh 1.5vh rgba(91, 24, 173, 0.606);">
+            <model-viewer id="model3" camera-orbit="0.966rad 1.54rad 16.4m"
+                camera-target="1.33m -0.32m 1.6m" src="assets/meshes/example/blob_edit.glb"
+                alt="Edited Blobs" camera-controls interaction-prompt="none" exposure=0.5 style="width: 100%; height: 100%;">
+            </model-viewer>
+            </div>
+          </div>
+          <div class="modelviewer-container">
+            <strong style="color: rgb(141, 26, 203);">Edited Mesh</strong>
+            <!-- <br> -->
+            <div class="model-viewer-wrapper" style="box-shadow: 0 0 3.3vh 1.5vh rgba(111, 22, 159, 0.606);">
+            <model-viewer id="model4" camera-orbit="0.966rad 1.54rad 16.4m"
+                camera-target="1.33m -0.32m 1.6m" src="assets/meshes/example/blob_edit.glb"
+                alt="Edited Mesh" camera-controls interaction-prompt="none" exposure=0.5 style="width: 100%; height: 100%;">
+            </model-viewer>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%;">
+          <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+            <input type="range" id="meshSlider0" min="0" max="10" step="0.01" value="0" class="vertical-slider">
+          </div>
+        </div> -->
+
+        <div style="width: 5%;"></div>
+
+        <div style="display: flex; flex-direction: column; height: 100%; gap: 20px; width: 30%; align-items: center;">
+
+          <!-- <div style="height: 15vh;"></div> -->
+          <!-- <br> -->
+          <strong style="color: rgb(255, 255, 255);">Select Objects</strong>
+          <!-- <div style="font-weight: bold; font-size: 1rem; margin-bottom: 0.5vh;">Select Scene:</div> -->
+
+          <!-- Scene Selector Card -->
+          <div style="background: #32323287; padding: 2vh; border-radius: 20px; color: white; height: 40%; width: 100%; box-shadow: 0 0 3.3vh 1.5vh #32323287;">
+            <div style="
+              display: flex;
+              flex-direction: column;
+              overflow-y: auto;
+              gap: 10px;
+              height: 100%;
+              scrollbar-width: thin;
+              scrollbar-color: #888 transparent;
+            ">
+              <div style="padding: 10px; background: #393939; border-radius: 8px; text-align: center; cursor: pointer;">Scene 1</div>
+              <div style="padding: 10px; background: #393939; border-radius: 8px; text-align: center; cursor: pointer;">Scene 2</div>
+              <div style="padding: 10px; background: #393939; border-radius: 8px; text-align: center; cursor: pointer;">Scene 3</div>
+              <div style="padding: 10px; background: #393939; border-radius: 8px; text-align: center; cursor: pointer;">Scene 4</div>
+              <div style="padding: 10px; background: #393939; border-radius: 8px; text-align: center; cursor: pointer;">Scene 5</div>
+              <div style="padding: 10px; background: #393939; border-radius: 8px; text-align: center; cursor: pointer;">Scene 6</div>
+              <div style="padding: 10px; background: #393939; border-radius: 8px; text-align: center; cursor: pointer;">Scene 7</div>
+            </div>
+          </div>
+
+          <div style="height: 10%;"></div>
+
+          <div class="slider-container" style="width: 100%; height: 100%; display:flex; flex-direction: row; gap: 20%;">
+            <!-- First custom vertical slider -->
+            <div class="slider" id="slider1" style="height: 40%;">
+              <div class="thumb"></div>
+            </div>
+            <!-- Second custom vertical slider -->
+            <div class="slider" id="slider2"  style="height: 40%;">
+              <div class="thumb"></div>
+            </div>
+            <!-- Third custom vertical slider -->
+            <div class="slider" id="slider3"  style="height: 40%;">
+              <div class="thumb"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>  
+    </div>
+
+    <br>
+
+
+    <!-- Comments on usage -->
+    <div class="hide-on-touchscreens" style="
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+    padding-top: 1em;
+    ">
+        <div>
+            <i class="ti ti-view-360-arrow"></i> <strong class="gradient-text-leftclick">Left-click</strong> and
+            drag to rotate
+        </div>
+        <div>
+            <i class="ti ti-arrows-move"></i> <strong class="gradient-text-rightclick">Right-click</strong> and
+            drag to move
+        </div>
+        <div><i class="ti ti-zoom"></i> <strong class="gradient-text-scroll">Scroll</strong> to zoom</div>
+        <div><i class="ti ti-adjustments-horizontal"></i> <strong class="gradient-text-slide">Slide</strong> to animate</div>
+
+      </div>
+
+
+  </div>
+
+  <!-- Clay -->
+  <div class="section is-medium" id="clay">
+    Cool this is the clay demo page.
+  </div>
+
+  <!-- Approach -->
+  <div class="section is-medium" id="approach">
+    <!-- Title -->
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 10vh;">
+      <div class="container">
+        <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 5vh;">
+          Approach
+        </h1>
+      </div>
+    </div>
+
+
+  <div style="text-align: center; margin-top: 20px;">
+    <img src="assets/approach.png" alt="Approach Image" style="max-width: 80%; height: auto; filter: brightness(90%);">
+  </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modelViewer1 = document.getElementById('model1');
+        const modelViewer2 = document.getElementById('model2');
+        const modelViewer3 = document.getElementById('model3');
+        const modelViewer4 = document.getElementById('model4');
+
+        const observer1 = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                const realSrc = modelViewer1.src;
+                modelViewer1.setAttribute('src', realSrc);
+                observer1.unobserve(modelViewer1);
+            }
+        });
+        const observer2 = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                const realSrc = modelViewer2.src;
+                modelViewer2.setAttribute('src', realSrc);
+                observer2.unobserve(modelViewer2);
+            }
+        });
+        const observer3 = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) {
+              const realSrc = modelViewer3.src;
+              modelViewer3.setAttribute('src', realSrc);
+              observer3.unobserve(modelViewer3);
+          }
+        });
+        const observer4 = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                const realSrc = modelViewer4.src;
+                modelViewer4.setAttribute('src', realSrc);
+                observer4.unobserve(modelViewer4);
+            }
+        });
+        
+        observer1.observe(modelViewer1);
+        observer1.observe(modelViewer2);
+        observer1.observe(modelViewer3);
+        observer1.observe(modelViewer4);
+
+        observer2.observe(modelViewer1);
+        observer2.observe(modelViewer2);
+        observer2.observe(modelViewer3);
+        observer2.observe(modelViewer4);
+        
+        observer3.observe(modelViewer1);
+        observer3.observe(modelViewer2);
+        observer3.observe(modelViewer3);
+        observer3.observe(modelViewer4);
+
+        observer4.observe(modelViewer1);
+        observer4.observe(modelViewer2);
+        observer4.observe(modelViewer3);
+        observer4.observe(modelViewer4);
+
+        modelViewer1.addEventListener('load', function () {
+            const threeCamera = modelViewer1.getCameraOrbit();
+            const fov = 17.6;
+
+            modelViewer1.camera.fieldOfView = fov;
+            modelViewer1.camera.updateProjectionMatrix();
+        });
+
+        modelViewer2.addEventListener('load', function () {
+            const threeCamera = modelViewer2.getCameraOrbit();
+            const fov = 17.6;
+
+            modelViewer2.camera.fieldOfView = fov;
+            modelViewer2.camera.updateProjectionMatrix();
+        });
+
+        modelViewer3.addEventListener('load', function () {
+          const threeCamera = modelViewer3.getCameraOrbit();
+          const fov = 17.6;
+
+          modelViewer3.camera.fieldOfView = fov;
+          modelViewer3.camera.updateProjectionMatrix();
+        });
+
+        modelViewer4.addEventListener('load', function () {
+          const threeCamera = modelViewer4.getCameraOrbit();
+          const fov = 17.6;
+
+          modelViewer4.camera.fieldOfView = fov;
+          modelViewer4.camera.updateProjectionMatrix();
+        });
+      });
+
+      const model1 = document.getElementById('model1');
+      const model2 = document.getElementById('model2');
+      const model3 = document.getElementById('model3');
+      const model4 = document.getElementById('model4');
+
+      let syncing = false;
+
+      let syncTimeout1 = null;
+      let syncTimeout2 = null;
+      let syncTimeout3 = null;
+      let syncTimeout4 = null;
+
+      const SYNC_DELAY_MS = 20;
+
+      // copy model1 camera to 2,3,4 
+      model1.addEventListener('camera-change', () => {
+          if (!syncing) {
+
+              if (syncTimeout1) {
+                  clearTimeout(syncTimeout1);
+              }
+
+              syncTimeout1 = setTimeout(() => {
+                  syncing = true;
+                  copyCameraSettings(model1, model2);
+                  copyCameraSettings(model1, model3);
+                  copyCameraSettings(model1, model4);
+                  requestAnimationFrame(() => {
+                      syncing = false;
+                  });
+              }, SYNC_DELAY_MS);
+          }
+      });
+
+      model2.addEventListener('camera-change', () => {
+          if (!syncing) {
+              if (syncTimeout2) {
+                  clearTimeout(syncTimeout2);
+              }
+              syncTimeout2 = setTimeout(() => {
+                  syncing = true;
+                  copyCameraSettings(model2, model1);
+                  copyCameraSettings(model2, model3);
+                  copyCameraSettings(model2, model4);
+                  requestAnimationFrame(() => {
+                      syncing = false;
+                  });
+              }, SYNC_DELAY_MS);
+          }
+      });
+
+      model3.addEventListener('camera-change', () => {
+        if (!syncing) {
+            if (syncTimeout3) {
+                clearTimeout(syncTimeout3);
+            }
+            syncTimeout3 = setTimeout(() => {
+                syncing = true;
+                copyCameraSettings(model3, model1);
+                copyCameraSettings(model3, model2);
+                copyCameraSettings(model3, model4);
+                requestAnimationFrame(() => {
+                    syncing = false;
+                });
+            }, SYNC_DELAY_MS);
+        }
+      });
+
+      model4.addEventListener('camera-change', () => {
+        if (!syncing) {
+            if (syncTimeout4) {
+                clearTimeout(syncTimeout4);
+            }
+            syncTimeout4 = setTimeout(() => {
+                syncing = true;
+                copyCameraSettings(model4, model1);
+                copyCameraSettings(model4, model2);
+                copyCameraSettings(model4, model3);
+                requestAnimationFrame(() => {
+                    syncing = false;
+                });
+            }, SYNC_DELAY_MS);
+        }
+      });
+
+      function copyCameraSettings(sourceModel, targetModel) {
+
+          const orbit = sourceModel.getCameraOrbit();
+          const fieldOfView = sourceModel.getFieldOfView();
+          const target = sourceModel.getCameraTarget();
+          targetModel.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius}m`;
+          targetModel.fieldOfView = `${fieldOfView}deg`;
+          targetModel.cameraTarget = `${target.x}m ${target.y}m ${target.z}m`;
+
+          console.log('Camera Orbit:', targetModel.cameraOrbit);
+          console.log('Camera FOV:', targetModel.fieldOfView);
+          console.log('Camera Target:', targetModel.cameraTarget);
+      }
+
+      function loadNewMesh(model_id, path) {
+        const viewer = document.getElementById(model_id);
+        // const progressContainer = document.getElementById('progress-container');
+        // const progressBar = document.getElementById('progress-bar');
+      
+        // Show and reset the progress bar
+        /*progressContainer.style.display = 'block';
+        progressBar.style.width = '0%';
+      
+        // Remove previous listeners to avoid duplicates
+        viewer.removeEventListener('progress', onProgress);
+        viewer.removeEventListener('load', onLoad);
+      
+        function onProgress(event) {
+          const progress = event.detail.totalProgress;
+          const percentage = Math.round(progress * 100);
+          progressBar.style.width = `${percentage}%`;
+        }
+      
+        function onLoad() {
+          progressBar.style.width = '100%';
+          setTimeout(() => {
+            progressContainer.style.display = 'none';
+          }, 300); // Optional fade-out delay
+        }
+      
+        // Attach event listeners
+        viewer.addEventListener('progress', onProgress);
+        viewer.addEventListener('load', onLoad); */
+      
+        // Trigger load
+        viewer.setAttribute('src', path);
+      }
+
+    const scrollContainer = document.querySelector('.scroll-container');
+    const sections = document.querySelectorAll(".section");
+    const dots = document.querySelectorAll(".section-nav .dot");
+    let current = "cover";
+
+    /** scrollContainer.addEventListener("scroll", () => {
+      console.log("scrolling!");
+    }); **/
+  
+    scrollContainer.addEventListener("scroll", () => {
+      // let current = "cover";
+      
+      // Loop through each section to find the one in view
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        const scrollPosition = scrollContainer.scrollTop +0.5 * scrollContainer.clientHeight;
+
+        // console.log('id', section.getAttribute("id"), 'section top', sectionTop, 'section bottom', sectionBottom, 'scroll position', scrollPosition);
+    
+        // Check if the section is in the viewport
+        if (scrollPosition > sectionTop && scrollPosition <= sectionBottom) {
+          current = section.getAttribute("id");
+        }
+      });
+    
+      // Loop through each dot to set the active class
+      dots.forEach(dot => {
+        dot.classList.remove("active");
+        // Match the dot's href to the current section id
+        if (dot.getAttribute("href").slice(1) === current) {
+          dot.classList.add("active");
+        }
+      });
+    });
+
+    function setupSlider(sliderId) {
+      var slider = document.getElementById(sliderId);
+      var thumb = slider.querySelector('.thumb');
+      var isDragging = false;
+
+      var initialTop = slider.offsetHeight - thumb.offsetHeight;
+      thumb.style.top = initialTop + 'px';
+
+      // Mouse down event to start dragging
+      thumb.addEventListener('mousedown', function(e) {
+        e.preventDefault(); // Prevent text selection
+        isDragging = true;
+        var offset = e.clientY - thumb.offsetTop;
+      
+        document.onmousemove = function(e) {
+          e.preventDefault(); // Prevent text selection
+          if (isDragging) {
+            var newTop = e.clientY - offset;
+            var sliderHeight = slider.offsetHeight;
+            var thumbHeight = thumb.offsetHeight;
+      
+            newTop = Math.max(0, Math.min(sliderHeight - thumbHeight, newTop));
+            thumb.style.top = newTop + 'px';
+          }
+        };
+      
+        document.onmouseup = function() {
+          isDragging = false;
+        };
+      });
+    }
+
+    $(document).ready(function() {
+      // Initialize all sliders
+      setupSlider('slider1');
+      setupSlider('slider2');
+      setupSlider('slider3');
+    });
+  </script>
+  </body>
+</html>

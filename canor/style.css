@@ -1,0 +1,437 @@
+@font-face {
+    font-family: 'Lato';
+    src: url('/assets/fonts/Lato-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+@font-face {
+    font-family: 'Lato';
+    src: url('/assets/fonts/Lato-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* body {
+    font-family: 'Lato', sans-serif;
+} */
+
+#changing-icon {
+    transition: opacity 0.1s ease;
+}
+  
+#changing-icon.fade {
+    opacity: 0;
+}
+
+.myfont {
+    font-family: 'Google Sans', sans-serif;
+    color: #ffffff;
+}
+
+.animated-gradient-text {
+    background: linear-gradient(270deg, #ff6ec4, #7873f5, #6ee7b7, #facc15);
+    background-size: 800% 800%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    padding-bottom: 0.1em;
+    animation: gradientMove 6s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.slider-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+    gap: 2vw;
+    width: 100%;
+    text-align: center;
+}
+
+.slider {
+    width: 0.7vw;
+    height: 4vh;
+    background: linear-gradient(0deg, #ffd7399a, #4000ff9d);
+    border-radius: 0.35vw;
+    position: relative;
+    cursor: pointer;
+}
+
+footer {
+    all: unset;
+    display: contents; /* behaves like the element doesn't exist layout-wise */
+  }
+
+.slider-one {
+    background: linear-gradient(0deg, #01c9b500, #16de91df);
+}
+
+.slider-two {
+    background: linear-gradient(0deg, #00759600, #14a8e8df);
+}
+
+.slider-three {
+    background: linear-gradient(0deg, #0168c900, #1169dcdf);
+}
+
+.slider .thumb {
+    width: 1.4vw;
+    height: 1.4vw;
+    background: rgb(60, 218, 189);
+    border-radius: 50%;
+    border: 0vh solid #3aa38e;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+
+    box-shadow: 0 0 0.8vw 0.5vw rgb(32, 114, 99);
+
+    /* rgba(59, 111, 111, 0.64) */
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Creates two columns */
+    grid-template-rows: 1fr 1fr;
+    width: 80%;
+    height: 100%;
+    flex: auto;
+    gap: 1vh;
+}
+
+.row {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.model-viewer-wrapper {
+    width: 80%;
+    /* You can adjust this value */
+    height: 25vh;
+    /* You can adjust this value */
+    max-width: 100%;
+    max-height: 80%;
+    justify-content: center;
+    /* Center the model viewer */
+    align-items: center;
+    /* Center the model viewer content */
+    display: flex;
+    background-color: #00000069;
+    /* Optional background for the wrapper */
+    border-radius: 20px;
+    /* Optional rounded corners */
+    margin-top: 20px;
+    /* Space between text and model viewer */
+}
+
+.selection-card {
+    background: #202020;
+    border-radius: 1.5vh;
+    text-align: center;
+    cursor: pointer;
+    padding: 1.3vh;
+    width: 80%;
+    /* height: 40%; */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.selected {
+    color: rgb(60, 218, 189); /* Darker text */
+}
+
+.selection-wrapper {
+    width: 80%;
+    /* You can adjust this value */
+    height: 80%;
+    /* You can adjust this value */
+    max-width: 100%;
+    max-height: 80%;
+    display: flex;
+    background-color: #00000087;
+    /* Optional background for the wrapper */
+    border-radius: 20px;
+    /* Optional rounded corners */
+    margin-top: 20px;
+    /* Space between text and model viewer */
+    overflow-y: auto;
+    gap: 1vh;
+    flex-direction: column;
+    font-weight: 600;
+}
+
+.slider-wrapper {
+    width: 80%;
+    /* You can adjust this value */
+    height: 80%;
+    /* You can adjust this value */
+    max-width: 100%;
+    max-height: 80%;
+    display: flex;
+    background-color: #00000087;
+    /* Optional background for the wrapper */
+    border-radius: 20px;
+    /* Optional rounded corners */
+    margin-top: 20px;
+    /* Space between text and model viewer */
+    font-weight: 600;
+}
+
+.selection-card:first-of-type {
+    margin-top: 2vh;
+    /* or any spacing you like */
+}
+
+.selection-card:last-of-type {
+    margin-bottom: 2vh;
+    /* or any spacing you like */
+}
+
+.modelviewer-container {
+    display: flex;
+    flex-direction: column;
+    /* Stack children vertically */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center horizontally */
+    width: 100%;
+    text-align: center;
+    height: 30vh;
+    max-height: 100%;
+}
+
+.selection-container {
+    display: flex;
+    flex-direction: column;
+    /* Stack children vertically */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center horizontally */
+    width: 100%;
+    height: 30vh;
+    max-height: 100%;
+    text-align: center;
+}
+
+.hero-cover-desktop {
+    background-color: #000000;
+    background-image: url("https://chen-geng.com/rose4d/static/videos/teaser.png");
+    background-size: cover;
+    color: #fff;
+}
+
+.hero-cover-touch {
+    background-color: #000000;
+    background-image: url("https://chen-geng.com/rose4d/static/videos/teaser-mobile.png");
+    background-size: cover;
+    color: #fff;
+}
+
+.column-my {
+    flex: 1;
+    /* Ensures both columns take up equal width */
+    display: flex;
+    flex-direction: column;
+}
+
+.text-white {
+    color: white;
+}
+
+.half {
+    flex: 1;
+    /* Each child takes half the height of the column */
+    display: flex;
+    /* Make it a flex container */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+    text-align: center;
+    /* Align text within the element */
+}
+
+html,
+body {
+    margin: 0;
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    overflow: hidden;
+    font-family: 'Linux Biolium', sans-serif;
+}
+
+.scroll-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+
+/**
+.section {
+  height: 100vh;
+  scroll-snap-align: start;
+  color: white;
+  background-color: #000000;
+}
+  **/
+
+@keyframes glowAnimation {
+    0% {
+        mask-image: radial-gradient(circle, rgba(255, 255, 255, 0) 40%, rgba(116, 64, 188, 0.7) 100%);
+    }
+
+    50% {
+        mask-image: radial-gradient(circle, rgba(255, 255, 255, 0) 30%, rgba(0, 255, 255, 0.8) 100%);
+    }
+
+    100% {
+        mask-image: radial-gradient(circle, rgba(255, 255, 255, 0) 40%, rgba(163, 82, 145, 0.8) 100%);
+    }
+}
+
+/*
+.section {
+  height: 100vh;
+  scroll-snap-align: start;
+  color: white;
+  background-color: #000000;
+  position: relative; 
+}
+*/
+
+.gradient-text-leftclick {
+    background: linear-gradient(45deg, #4e54c8, #8f94fb);
+    /* background: linear-gradient(45deg, #0086d4, #4e54c8); */
+    /* Define your gradient */
+    -webkit-background-clip: text;
+    /* Required for Safari */
+    background-clip: text;
+    /* Standard for modern browsers */
+    color: transparent;
+    /* Set text color to transparent */
+}
+
+.gradient-text-rightclick {
+    background: linear-gradient(45deg, #8f94fb, #7960ca);
+    /* background: linear-gradient(45deg, #4e54c8, #8f94fb); */
+    /* Define your gradient */
+    -webkit-background-clip: text;
+    /* Required for Safari */
+    background-clip: text;
+    /* Standard for modern browsers */
+    color: transparent;
+    /* Set text color to transparent */
+}
+
+.gradient-text-scroll {
+    background: linear-gradient(45deg, #7960ca, #c672c5);
+    /* background: linear-gradient(45deg, #8f94fb, #7960ca); */
+    /* Define your gradient */
+    -webkit-background-clip: text;
+    /* Required for Safari */
+    background-clip: text;
+    /* Standard for modern browsers */
+    color: transparent;
+    /* Set text color to transparent */
+}
+
+.gradient-text-slide {
+    background: linear-gradient(45deg, #0086d4, #4e54c8);
+    /* background: linear-gradient(45deg, #7960ca, #c672c5); */
+    /* Define your gradient */
+    -webkit-background-clip: text;
+    /* Required for Safari */
+    background-clip: text;
+    /* Standard for modern browsers */
+    color: transparent;
+    /* Set text color to transparent */
+}
+
+.section {
+    height: 100vh;
+    scroll-snap-align: start;
+    color: white;
+    flex-direction: column;
+    background-color: #000000;
+    position: relative;
+    display: flex;
+    /* Enables Flexbox layout */
+    justify-content: center;
+    /* Centers content horizontally */
+    align-items: center;
+    /* Centers content vertically */
+}
+
+/* 
+.section::before {
+content: ''; 
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: radial-gradient(farthest-corner, rgba(255, 255, 255, 0) 70%, rgba(133, 72, 255, 0.342) 100%);
+pointer-events: none;
+z-index: 1000;
+} 
+*/
+
+.section-nav {
+    position: fixed;
+    top: 50%;
+    right: 0.8vh;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+    z-index: 100;
+}
+
+.section-nav .dot {
+    width: 1.3vh;
+    height: 1.3vh;
+    border-radius: 50%;
+    background: #ccc;
+    transition: background 0.3s ease;
+}
+
+.section-nav .dot:hover,
+.section-nav .dot.active {
+    background: #36e9e6;
+}
+
+.pad {
+    width: 300px;
+    height: 300px;
+    background-color: #ccc;
+    position: relative;
+    border: 2px solid #888;
+    border-radius: 8px;
+    touch-action: none;
+    /* for better mobile support */
+    user-select: none;
+}
+
+.pad-dot {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    /* allow events to pass through */
+}

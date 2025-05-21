@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Multi-Select</title>
+  <style>
+    .multi-select-options {
+      max-height: 30vh;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <select id="mySelect" data-multi-select data-placeholder="Select An Object" data-dropdownHeight="30vh">
+      <option value="scene1">Scene 1</option>
+      <option value="scene2">Scene 2</option>
+      <option value="scene3">Scene 3</option>
+      <option value="scene4">Scene 4</option>
+      <option value="scene5">Scene 5</option>
+      <option value="scene6">Scene 6</option>
+      <option value="scene7">Scene 7</option>
+    </select>
+  </div>
+  <script src="path/to/multiselect.js"></script>
+  <script>
+    document.querySelectorAll('[data-multi-select]').forEach(select => new MultiSelect(select));
+  </script>
+</body>
+</html>
