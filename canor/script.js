@@ -626,9 +626,10 @@ async function preloadMeshes(meshPaths) {
 
 function generateMeshPaths(baseDir, dim1, dim2, dim3) {
     const paths = [];
-    for (let i = 0; i < dim1; i++) {
+    // Let larger digits load first
+    for (let k = 0; k < dim3; k++) {
       for (let j = 0; j < dim2; j++) {
-        for (let k = 0; k < dim3; k++) {
+        for (let i = 0; i < dim1; i++) {
           const filename = `${String(i).padStart(2, '0')}_${String(j).padStart(2, '0')}_${String(k).padStart(2, '0')}.glb`;
           // Make sure baseDir ends with '/' or add it
           const fullPath = baseDir.endsWith('/') ? baseDir + filename : baseDir + '/' + filename;
@@ -638,19 +639,36 @@ function generateMeshPaths(baseDir, dim1, dim2, dim3) {
     }
     return paths;
 }
-  
-const quad_mesh_paths = generateMeshPaths("assets/meshes/quad/mesh", 10, 10, 10);
-// console.log('qua mesdh paths', quad_mesh_paths);
-const quad_blob_paths = generateMeshPaths("assets/meshes/quad/blob", 10, 10, 10);
-preloadMeshes(quad_blob_paths);  // Blobs are closer to user's interactions so we preload them first
-preloadMeshes(quad_mesh_paths);
 
-const fish_mesh_paths = generateMeshPaths("assets/meshes/fish/mesh", 10, 10, 10);
-const fish_blob_paths = generateMeshPaths("assets/meshes/fish/blob", 10, 10, 10);
-preloadMeshes(fish_blob_paths);
-preloadMeshes(fish_mesh_paths);
+function mergeClose(list1, list2) {
+    if (list1.length !== list2.length) {
+      throw new Error('Both lists must be the same length');
+    }
+    
+    const merged = [];
+    for (let i = 0; i < list1.length; i++) {
+      merged.push(list1[i]);
+      merged.push(list2[i]);
+    }
+    return merged;
+  }
 
-const glasses_mesh_paths = generateMeshPaths("assets/meshes/glasses/mesh", 10, 10, 1);
-const glasses_blob_paths = generateMeshPaths("assets/meshes/glasses/blob", 10, 10, 1);
-preloadMeshes(glasses_blob_paths);
-preloadMeshes(glasses_mesh_paths);
+async function prefetchMeshes() {
+    const quad_mesh_paths = generateMeshPaths("assets/meshes/quad/mesh", 10, 10, 10);
+    // console.log('qua mesdh paths', quad_mesh_paths);
+    const quad_blob_paths = generateMeshPaths("assets/meshes/quad/blob", 10, 10, 10);
+    const quad_paths = mergeClose(quad_blob_paths, quad_mesh_paths);
+    await preloadMeshes(quad_paths);  // Blobs are closer to user's interactions so we preload them first
+
+    const fish_mesh_paths = generateMeshPaths("assets/meshes/fish/mesh", 10, 10, 10);
+    const fish_blob_paths = generateMeshPaths("assets/meshes/fish/blob", 10, 10, 10);
+    const fish_paths = mergeClose(fish_blob_paths, fish_mesh_paths);
+    await preloadMeshes(fish_paths);
+
+    const glasses_mesh_paths = generateMeshPaths("assets/meshes/glasses/mesh", 10, 10, 1);
+    const glasses_blob_paths = generateMeshPaths("assets/meshes/glasses/blob", 10, 10, 1);
+    glasses_paths = mergeClose(glasses_blob_paths, glasses_mesh_paths);
+    await preloadMeshes(glasses_paths);
+}
+
+prefetchMeshes();
