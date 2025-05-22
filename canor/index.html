@@ -36,6 +36,9 @@
   <script src="https://chen-geng.com/rose4d/static/js/select.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  
+  <!-- import { unzipSync, strFromU8 } from 'https://cdn.jsdelivr.net/npm/fflate@0.8.1/esm/index.js'; -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/fflate@0.8.1/esm/index.js"></script>
 
   <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@latest/dist/model-viewer.js"></script> -->
   <!-- <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script> -->
@@ -64,7 +67,7 @@
       <!-- Teaser video -->
       <div class="hero-video" style="height: 100%; width: 177.77777778vh; min-width: 100%;min-height: 56.25vw;">
         <video playsinline autoplay muted loop>
-          <source src="https://chen-geng.com/rose4d/static/videos/teaser-small.mp4" type="video/mp4">
+          <source src="assets/videos/teaser_video_fade.mp4" type="video/mp4">
         </video>
       </div>
 
@@ -106,7 +109,7 @@
             <div class="navbar-menu">
               <div class="navbar-end">
 
-                <a class="navbar-item pl-4 pr-4" href="https://guangzhaohe.com/canor/assets/paper.pdf" style="font-size: 1.4vw;">
+                <a class="navbar-item pl-4 pr-4" href="assets/canor.pdf" style="font-size: 1.4vw;">
                   <i class="ti ti-file" style="margin-right: 0.3vw;"></i>
                   <span class="myfont">Paper</span>
                 </a>
@@ -148,7 +151,7 @@
             Neural Object Rigging
           </h1>
           
-          <h1 class="subtitle is-1 publication-title myfont" style="padding-top: 10vh; font-size: 2.5vw;">
+          <h1 class="subtitle is-1 is-size-4-mobile publication-title myfont" style="padding-top: 10vh; font-size: 2.5vw;">
             CVPR 2025
           </h1>
           <h1 class="is-2 is-size-4-mobile" style="font-size: 2.5vw; opacity: 100%;">
@@ -259,7 +262,7 @@
       <div
         style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 10vh;">
         <div class="container">
-          <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 4vh;">
+          <h1 class="title is-size-1-mobile text-white" style="font-size: 3vw;">
             Introduction
           </h1>
         </div>
@@ -267,7 +270,7 @@
 
       <br>
 
-      <div class="content" style="font-size: 2vh; width: 80%; text-align: center;">
+      <div class="content is-size-6-mobile" style="font-size: 1.5vw; width: 80%; text-align: center;">
         <!-- Our world is populated by diverse, ever-moving beings — not just humans, but also pets, wild animals, and other dynamic entities that can move and deform. -->
         In this work, we study the problem of modeling and understanding the <strong style="color: rgb(60, 218, 189); font-weight: bold;">structure of motion</strong> for <strong style="color: rgb(60, 218, 189); font-weight: bold;">arbitrary categories</strong> of deformable objects without prior knowledge. 
         Due to the inherent low-dimensionality of motion structures, we learn to discover a low-dimensional pose space for dynamic objects by encoding them into a set of blobs. 
@@ -287,7 +290,7 @@
       <div
         style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 10vh;">
         <div class="container">
-          <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 4vh;">
+          <h1 class="title text-white" style="font-size: 3vw;">
             Try animating with blobs yourself!
           </h1>
         </div>
@@ -296,7 +299,7 @@
       <br>
 
       <div style="display: flex; justify-content: center; align-items: center; height: 8vh;">
-        <div class="content" style="font-size: 2vh; width: 80%; text-align: center;">
+        <div class="content" style="font-size: 1.5vw; width: 80%; text-align: center;">
           <!-- <p> -->
           <!-- We show the comparison of the generated 4D contents and baselines. <strong>Note that none of the baselines -->
             <!-- could generate object intrinsics or relightable graphics assets.</strong> Therefore we only compare the -->
@@ -333,13 +336,13 @@
         <div class="grid-container">
 
           <div class="selection-container">
-            <strong style="color: rgb(39, 162, 123); font-size: 1.8vh;">Select An Object</strong>
+            <strong style="color: rgb(39, 162, 123); font-size: 1.3vw;">Select An Object</strong>
 
             <div class="selection-wrapper" id="selectionWrapper"
-              style="height: 25vh; color: white; box-shadow: 0 0 3.3vh 1.5vh rgba(29, 99, 87, 0.529); font-size: 1.5vh;">
-              <div class="selection-card selected"><i class="ti ti-paw" style="font-size: 1.5vh;"></i> Quadruped</div>
-              <div class="selection-card"><i class="ti ti-fish" style="font-size: 1.5vh;"></i> Fish</div>
-              <div class="selection-card"><i class="ti ti-eyeglass" style="font-size: 1.5vh;"></i> Glasses</div>
+              style="height: 25vh; color: white; box-shadow: 0 0 3.3vh 1.5vh rgba(29, 99, 87, 0.529); font-size: 1vw;">
+              <div class="selection-card selected"><i class="ti ti-paw" style="font-size: 1vw;"></i><span> Quadruped</span></div>
+              <div class="selection-card"><i class="ti ti-fish" style="font-size: 1vw;"></i><span> Fish</span></div>
+              <div class="selection-card"><i class="ti ti-eyeglass" style="font-size: 1vw;"></i><span> Glasses</span></div>
               <!-- <div class="selection-card">Things</div>
               <div class="selection-card">Scene 5</div>
               <div class="selection-card">Scene 6</div>
@@ -349,7 +352,7 @@
           </div>
 
           <div class="modelviewer-container">
-            <strong style="color: rgb(44, 76, 204); font-size: 1.8vh;">1. Input Mesh</strong>
+            <strong style="color: rgb(44, 76, 204); font-size: 1.3vw;">1. Input Mesh</strong>
             <!-- <br> -->
             <!-- <div id="progress-container" style="position: absolute; bottom: 10px; left: 10px; width: 200px; background: #eee; height: 6px; display: none;">
               <div id="progress-bar" style="background: #3498db; height: 100%; width: 0%; transition: width 0.2s;"></div>
@@ -364,7 +367,7 @@
 
           <div class="modelviewer-container">
             <!-- <h3> -->
-            <strong style="color: rgb(106, 61, 232); font-size: 1.8vh;">2. Predicted Blobs</strong>
+            <strong style="color: rgb(106, 61, 232); font-size: 1.3vw;">2. Predicted Blobs</strong>
             <!-- </h3> -->
             <!-- <br> -->
             <div class="model-viewer-wrapper" style="box-shadow: 0 0 3.3vh 1.5vh rgba(55, 18, 156, 0.606);">
@@ -376,7 +379,7 @@
           </div>
 
           <div class="modelviewer-container">
-            <strong style="color: rgb(39, 162, 123); font-size: 1.8vh;">Slide To Edit</strong>
+            <strong style="color: rgb(39, 162, 123); font-size: 1.3vw;">Slide To Edit</strong>
             <div class="slider-wrapper"
               style="max-height: 25vh; color: white; box-shadow: 0 0 3.3vh 1.5vh rgba(29, 99, 87, 0.529);">
 
@@ -400,7 +403,7 @@
           </div>
 
           <div class="modelviewer-container">
-            <strong style="color: rgb(117, 37, 214); font-size: 1.8vh;">3. Edited Blobs</strong>
+            <strong style="color: rgb(117, 37, 214); font-size: 1.3vw;">3. Edited Blobs</strong>
             <!-- <br> -->
             <div class="model-viewer-wrapper" style="box-shadow: 0 0 3.3vh 1.5vh rgba(91, 24, 173, 0.606);">
               <model-viewer id="model3" 
@@ -411,7 +414,7 @@
           </div>
 
           <div class="modelviewer-container">
-            <strong style="color: rgb(141, 26, 203); font-size: 1.8vh;">4. Edited Mesh</strong>
+            <strong style="color: rgb(141, 26, 203); font-size: 1.3vw;">4. Edited Mesh</strong>
             <!-- <br> -->
             <div class="model-viewer-wrapper" style="box-shadow: 0 0 3.3vh 1.5vh rgba(111, 22, 159, 0.606);">
               <model-viewer id="model4" 
@@ -447,7 +450,7 @@
     justify-content: center;
     gap: 1.5vh;
     padding-top: 1vh;
-     font-size: 1.8vh;
+     font-size: 1.3vw;
     ">
       <div><i class="ti ti-adjustments-horizontal"></i> <strong class="gradient-text-slide">Slide</strong> to animate</div>
       <div><i class="ti ti-view-360-arrow"></i> <strong class="gradient-text-leftclick">Left-click</strong> and drag to rotate</div>
@@ -461,7 +464,64 @@
 
     <!-- Clay -->
     <div class="section is-medium myfont" id="clay">
-      Cool this is the clay demo page.
+      <!-- Title -->
+      <div
+        style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 10vh;">
+        <div class="container">
+          <h1 class="title is-size-1-mobile text-white" style="font-size: 3vw;">
+            Animating "Clay-Monster"
+          </h1>
+        </div>
+      </div>
+
+      <br>
+
+      <!-- <div class="content" style="font-size: 2vh; width: 80%; text-align: center;">
+      To further showcase the potential of our method in real-world applications-particularly for casual users without 3D modeling expertise-we construct an object category called "clay-monster", consisting of 12 clay figures scanned in 3 to 5 poses each <strong style="color: rgb(60, 218, 189); font-weight: bold;">using only an iPhone</strong>. 
+      The scans are captured using ARKit, and each takes approximately one minute to complete. 
+      Using this simple scanning pipeline, we are able to train our model for pose manipulation of such artificial "clay-monsters".
+      </div>
+
+      <div style="text-align: center; margin-top: 0vh;">
+        <img src="assets/images/clay_monster.png" alt="Approach Image"
+          style="max-width: 50%; height: auto; filter: brightness(90%);">
+      </div> -->
+
+
+
+       <!-- Two Columns -->
+  <div class="columns" style="width: 80%; margin: auto;">
+    
+    <!-- Left Column -->
+    <div class="column is-flex is-flex-direction-column is-align-items-center is-justify-content-center">
+      <div class="content is-size-6-mobile" style="font-size: 1.5vw; text-align: center; max-width: 90%;">
+        <!-- <p> -->
+          We capture a <strong style="color: rgb(60, 218, 189); font-weight: bold;">real-world category</strong> called "clay-monster", with 12 clay figures scanned in 3 to 5 poses each using <strong style="color: rgb(60, 218, 189); font-weight: bold;">only an iPhone</strong>.
+        <!-- </p> -->
+      </div>
+
+      <div style="text-align: center; margin-top: 2vh;">
+        <img src="assets/images/clay_capture.png" alt="Clay Capture"
+          style="max-width: 100%; height: auto; filter: brightness(90%);">
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="column is-flex is-flex-direction-column is-align-items-center is-justify-content-center">
+      <div style="text-align: center; margin-bottom: 2vh;">
+        <img src="assets/images/clay_monster.png" alt="Clay Monster"
+          style="max-width: 90%; height: auto; filter: brightness(90%);">
+      </div>
+
+      <div class="content is-size-6-mobile" style="font-size: 1.5vw; text-align: center; max-width: 90%;">
+        Using this simple scanning pipeline, we are able to train our model for <strong style="color: rgb(60, 218, 189); font-weight: bold;">pose manipulation</strong> of such artificial "clay-monsters".
+      </div>
+    </div>
+
+  </div>
+
+
+
     </div>
 
     <!-- Approach -->
@@ -470,14 +530,14 @@
       <div
         style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 10vh;">
         <div class="container">
-          <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 4vh;">
+          <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 3vw;">
             Approach
           </h1>
         </div>
       </div>
 
       <br>
-      <div class="content" style="font-size: 2vh; width: 80%; text-align: center;">
+      <div class="content is-6 is-size-6-mobile" style="font-size: 1.5vw; width: 80%; text-align: center;">
         We use a set of <strong style="color: rgb(60, 218, 189); font-weight: bold;">feature-embeded blobs</strong> to represent the pose space of deformable objects.
         An encoder takes an object point cloud as input and maps it into blobs using a learnable codebook of query tokens that cross-attend
         with semantic point-wise features. 
@@ -497,7 +557,7 @@
       <div
         style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 10vh;">
         <div class="container">
-          <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 4vh;">
+          <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 3vw;">
             Miscellaneous
           </h1>
         </div>
@@ -509,7 +569,7 @@
       <div
       style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 10vh;">
       <div class="container">
-        <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 3vh;">
+        <h1 class="title is-1 is-hidden-touch text-white width: 90%;" style="font-size: 3vh;">
           Bibtex
         </h1>
       </div>
@@ -518,7 +578,7 @@
     <br>
 
     <div style="width: 80%; display: flex; flex-direction: column; align-items: center;">
-      <div class="columns is-centered">
+      <div class="columns is-centered is-hidden-touch">
         <div class="content" style="margin-top: 10pt; width: 100%;">
           <div style="
             border-radius: 12px;
@@ -549,7 +609,7 @@
       <div
       style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 10vh;">
       <div class="container">
-        <h1 class="title is-1 is-size-1-mobile text-white" style="font-size: 3vh;">
+        <h1 class="title is-1 is-size-2-mobile text-white" style="font-size: 3vh;">
           Acknowledgements
         </h1>
       </div>
@@ -570,7 +630,6 @@
               </p>
               <p>
                 This means you are free to borrow and modify the <a href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website as long as you link back to the <a href="https://nerfies.github.io/">NeRFies</a> page in the footer.
-                <!-- Please remember to remove the analytics code included in the header of the website which you do not want on your website. -->
               </p>
             </div>
           </div>
